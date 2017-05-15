@@ -62,7 +62,6 @@ class indicator(object):
                 for row_index in rows_to_update:
                     value  = calculated[row_index - first_to_update + undef]
                     if np.isnan(value):
-                        print value
                         value = None
                     (session.query(Indicator)
                             .filter_by(Id=ids[row_index])
