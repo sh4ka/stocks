@@ -53,4 +53,6 @@ install_manifest.txt
 StockDB++/cmake.sh
 StockDB++/build
 
+database/config.py
+
 
