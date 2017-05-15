@@ -2,7 +2,7 @@
 
 from datetime import date
 
-from . import actions
+import actions
 
 
 class Account(object):
