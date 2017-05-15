@@ -8,9 +8,10 @@ import numpy as np
 from pandas import DataFrame
 from sqlalchemy.orm import joinedload
 
+from models import Quote, Indicator
 
-from ..quant import analysis
-from .models import Quote, Indicator
+sys.path.insert(0, '../quant')
+import analysis #quant
 
 # Create class for holding range info
 rangeType = namedtuple('rangeType', ['min', 'max'])
@@ -60,6 +61,9 @@ class indicator(object):
                 undef = self.nundefined
                 for row_index in rows_to_update:
                     value  = calculated[row_index - first_to_update + undef]
+                    if np.isnan(value):
+                        print value
+                        value = None
                     (session.query(Indicator)
                             .filter_by(Id=ids[row_index])
                             .update({self.name: value}))
@@ -70,6 +74,8 @@ class indicator(object):
             ids = data['ids']
             for row_index in range(len(data['ids'])):
                 value = calculated[row_index]
+                if np.isnan(value):
+                    value = None
                 session.query(Indicator).filter_by(Id=ids[row_index]).update({self.name:value})
 
         # Commit changes
