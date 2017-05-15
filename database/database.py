@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import sys
 import time
 import datetime
 from datetime import  date, timedelta
@@ -10,9 +11,11 @@ from sqlalchemy.orm import sessionmaker, joinedload, eagerload
 from sqlalchemy.sql import and_
 
 
-from . import config
-from . import indicators
-from ..sources import yahoofinance as quotes
+import config as cfg
+import indicators
+
+sys.path.insert(0, '../sources')
+import yahoofinance as quotes #sources
 
 class Database(object):
 
@@ -23,15 +26,15 @@ class Database(object):
         self.Base = Base
 
         # Handle edge case here
-        if config.STOCKS_SQL_PASSWORD == '':
-            engine_config = 'mysql://%s@%s/%s' % (config.STOCKS_SQL_USER,
-                                                  config.STOCKS_SQL_HOSTNAME,
-                                                  config.STOCKS_SQL_DATABASE)
+        if cfg.STOCKS_SQL_PASSWORD == '':
+            engine_config = 'mysql://%s@%s/%s' % (cfg.STOCKS_SQL_USER,
+                                                  cfg.STOCKS_SQL_HOSTNAME,
+                                                  cfg.STOCKS_SQL_DATABASE)
         else:
-            engine_config = 'mysql://%s:%s@%s/%s' % (config.STOCKS_SQL_USER,
-                                                     config.STOCKS_SQL_PASSWORD,
-                                                     config.STOCKS_SQL_HOSTNAME,
-                                                     config.STOCKS_SQL_DATABASE)
+            engine_config = 'mysql://%s:%s@%s/%s' % (cfg.STOCKS_SQL_USER,
+                                                     cfg.STOCKS_SQL_PASSWORD,
+                                                     cfg.STOCKS_SQL_HOSTNAME,
+                                                     cfg.STOCKS_SQL_DATABASE)
         self.Engine = create_engine(engine_config)
         self.Session = sessionmaker()
         self.Session.configure(bind=self.Engine)
