@@ -10,15 +10,14 @@ class Backtester(object):
         self.initial_value = initial_value
         self.dataset = dataset
         self.value = []
-		benchmark = []
+        self.benchmark = []
         self.first = True
 
     def backtest(self):
         for tick_data in self.dataset:
             action = self.algorithm.tick(tick_data)
             if self.first:
-
-            benchmark.append()
+                self.benchmark.append()
 
 
 
