@@ -95,6 +95,23 @@ class Manager(object):
         session.close()
         self.update_quotes(ticker)
 
+    def delete_symbol(self, ticker):
+        """ Delete a symbol with all its children from the database
+        :param ticker: Stock ticker symbol
+        """
+        ticker = ticker.lower()
+        session = self.db.Session()
+
+        if not self.check_stock_exists(ticker, session):
+            print "Stock %s already exists!" % (ticker.upper())
+            return
+
+        symbol = session.query(Symbol).filter_by(Ticker=ticker.lower()).first()
+        print "Deleting %s. This can take a while!" % (ticker.upper())
+        session.delete(symbol)
+        session.commit()
+        session.close()
+
 
     def _download_quotes(self, ticker, start_date, end_date):
         """ Get quotes from Yahoo Finance
@@ -294,6 +311,9 @@ if __name__ == '__main__':
 
         elif opt == 'update':
             db.update_quotes(str(argv[2]))
+
+        elif opt == 'delete':
+            db.delete_symbol(str(argv[2]))
 
     else:
         exit('No command specified. Exiting.')
